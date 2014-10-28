@@ -105,11 +105,17 @@
 }
 
 \begin{frame}{This Week's Lectures}
-    \begin{itemize}
-        \item Search and Discrepancies
-        \item Parallel CP
-        \item Parallel Search
-    \end{itemize}
+    \begin{columns}
+        \column{.5\textwidth}
+        \begin{itemize}
+            \item Search and Discrepancies
+            \item Parallel CP
+            \item Parallel Search
+        \end{itemize}
+        \column{.5\textwidth}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.5]{search-but-not-as-we-know-it.jpg}
+        \begin{center}``It's search, Jim, but not\\as we know it.''\end{center}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Maintaining Arc Consistency (MAC)}
@@ -253,12 +259,17 @@
 \end{frame}
 
 \begin{frame}{Completeness}
-    \begin{itemize}
-        \item Complete: `yes'' means ``yes'', and ``no'' means ``no''.
-        \item Incomplete: ``yes'' means ``yes'', and ``no'' means ``maybe''.
-        \item LDS is \emph{quasi-complete}: if the total number of discrepancies is allowed to go
-            high enough, it is complete.
-    \end{itemize}
+    \begin{columns}
+        \column{.75\textwidth}
+        \begin{itemize}
+            \item Complete: yes means yes, no means no.
+            \item Incomplete: yes means yes, no means maybe.
+            \item LDS is \emph{quasi-complete}: if the total number of discrepancies is allowed to go
+                high enough, it is complete.
+        \end{itemize}
+        \column{.25\textwidth}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.4]{quasi.jpg}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Improved Limited Discrepancy Search}
@@ -276,6 +287,9 @@
     \end{columns}
 \end{frame}
 
+\begin{frame}{Depth-Bounded Discrepancy Search}
+\end{frame}
+
 \begin{frame}{So is the Second Claim Important?}
     \centering\includegraphics*[keepaspectratio=true,scale=0.4]{ldsr-paper.png}
 
@@ -287,7 +301,15 @@
 
 \end{frame}
 
-\begin{frame}{Depth-Bounded Discrepancy Search}
+\begin{frame}{What about the First Claim?}
+    \centering\includegraphics*[keepaspectratio=true,scale=0.2]{shape-paper.png}
+
+    \vspace{2em}
+
+    \centering\includegraphics*[keepaspectratio=true,scale=0.2]{shape-conclusion.png}
+
+    \vspace{0em}
+
 \end{frame}
 
 \begin{frame}{What About Unsatisfiable Instances?}
@@ -313,7 +335,7 @@
         \item More on this theme:
             \begin{itemize}
                 \item Yet ImprovEd Limited Discrepancy Search
-                \item Limited Discrepancy Beam Search
+                \item Beam search Using Limited discrepancy Backtracking
                 \item Probe Search
                 \item Restarts
                 \item \ldots
