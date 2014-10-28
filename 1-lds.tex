@@ -40,7 +40,7 @@
 \colorlet{gp lt color 7}{uofgtorange}
 
 % {{{ theme things
-\useoutertheme[footline=authorinstitutetitle]{miniframes}
+\useoutertheme[footline=authortitle]{miniframes}
 \useinnertheme{rectangles}
 
 \setbeamerfont{block title}{size={}}
@@ -53,21 +53,6 @@
 \setbeamercolor*{titlelike}{parent=palette primary}
 
 \beamertemplatenavigationsymbolsempty
-
-\tikzset{vertex/.style={draw, circle, inner sep=0pt, minimum size=0.5cm, font=\small\bfseries}}
-\tikzset{notvertex/.style={vertex, color=white, text=black}}
-\tikzset{plainvertex/.style={vertex}}
-\tikzset{selectedvertex/.style={vertex, fill=uofgblue}}
-\tikzset{vertexc1/.style={vertex, fill=uofgblue40}}
-\tikzset{vertexc2/.style={vertex, fill=uofgblue}}
-\tikzset{vertexc3/.style={vertex, fill=uofgtdarkgreen}}
-\tikzset{vertexc4/.style={vertex, fill=uofgtorange}}
-\tikzset{edge/.style={color=screengrey}}
-\tikzset{bedge/.style={ultra thick}}
-\tikzset{edgel1/.style={ultra thick, color=uofgblue}}
-\tikzset{edgel2/.style={ultra thick, color=uofgblue40}}
-\tikzset{edgel3/.style={ultra thick, color=uofgtdarkgreen}}
-\tikzset{edgel4/.style={ultra thick, color=uofgtorange}}
 
 \setbeamertemplate{title page}
 {
@@ -89,6 +74,31 @@
         \node [anchor=north west, shift={(0.2cm,-0.2cm)}] at (current page.north west) {\includegraphics*[keepaspectratio=true,scale=0.5]{UoG_keyline.eps}};
     \end{tikzpicture}
 }
+
+\newcommand{\frameofframes}{/}
+\newcommand{\setframeofframes}[1]{\renewcommand{\frameofframes}{#1}}
+
+\makeatletter
+\setbeamertemplate{footline}
+{%
+    \begin{beamercolorbox}[colsep=1.5pt]{upper separation line foot}
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+        leftskip=.3cm,rightskip=.3cm plus1fil]{author in head/foot}%
+        \leavevmode{\usebeamerfont{author in head/foot}\insertshortauthor}%
+        \hfill%
+        {\usebeamerfont{institute in head/foot}\usebeamercolor[fg]{institute in head/foot}\insertshortinstitute}%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+        leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
+        {\usebeamerfont{title in head/foot}\insertshorttitle}%
+        \hfill%
+        {\usebeamerfont{frame number}\usebeamercolor[fg]{frame number}\insertframenumber~\frameofframes~\inserttotalframenumber}
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[colsep=1.5pt]{lower separation line foot}
+    \end{beamercolorbox}
+}
+\makeatother
 
 % }}}
 
@@ -276,7 +286,6 @@
     \begin{itemize}
         \item LDS explores some parts of the search tree more than once.
         \item Improved Limited Discrepancy Search (ILDS) does less repeated work.
-        \item But it ignores claim 2 entirely!
     \end{itemize}
 
     \begin{columns}[T]
@@ -287,7 +296,14 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Depth-Bounded Discrepancy Search}
+\begin{frame}{Improved?}
+    \begin{columns}
+        \column{.5\textwidth}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.4]{ilds-paths.png}
+        \column{.5\textwidth}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.18]{lds-tree.png}
+    \end{columns}
+
 \end{frame}
 
 \begin{frame}{So is the Second Claim Important?}
@@ -301,15 +317,7 @@
 
 \end{frame}
 
-\begin{frame}{What about the First Claim?}
-    \centering\includegraphics*[keepaspectratio=true,scale=0.2]{shape-paper.png}
-
-    \vspace{2em}
-
-    \centering\includegraphics*[keepaspectratio=true,scale=0.2]{shape-conclusion.png}
-
-    \vspace{0em}
-
+\begin{frame}{What About Non-Binary Domains?}
 \end{frame}
 
 \begin{frame}{What About Unsatisfiable Instances?}
@@ -322,18 +330,60 @@
     \vspace{1em}
 
     \centering\includegraphics*[keepaspectratio=true,scale=0.4]{ldsr-bt.png}
-    \vspace{0em}
+
+    \vspace{1em}
+
+    \begin{itemize}
+        \item Optimisation?
+    \end{itemize}
 
 \end{frame}
 
+\begin{frame}{Using LDS?}
+    \begin{center}
+        \includegraphics*[keepaspectratio=true,scale=0.2]{lds-patent.png}
+    \end{center}
+\end{frame}
 
-\begin{frame}{Non-Binary Domains?}
+\begin{frame}{Writing Our Own Search in Choco}
+    \begin{itemize}
+        \item Possible in Choco 2 by extending the \texttt{Problem} class: \\
+            \url{http://www.dcs.gla.ac.uk/\~pat/jchoco/lds/golomb}
+        \item Easier in Choco 3 due to more abstraction: it's an example in the manual. (But is this
+            LDS, ILDS, or something else?)
+    \end{itemize}
+
+    \begin{columns}[T]
+        \column{.5\textwidth}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.3]{lds-choco3-col1.png}
+        \column{.5\textwidth}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.3]{lds-choco3-col2.png}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Search Combinators?}
+    \begin{columns}[T]
+        \column{.5\textwidth}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.12]{sc-title.png}
+        \vspace{1em}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.27]{sc-primitives.png}
+
+        \column{.5\textwidth}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.25]{sc-contributions.png}
+        \vspace{1em}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.25]{sc-se.png}
+        \vspace{1em}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.25]{sc-lds.png}
+        \vspace{1em}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.25]{sc-monads.png}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Probably Not Included in This Course}
     \begin{itemize}
         \item More on this theme:
             \begin{itemize}
+                \item Depth Bounded Discrepancy Search
                 \item Yet ImprovEd Limited Discrepancy Search
                 \item Beam search Using Limited discrepancy Backtracking
                 \item Probe Search
@@ -346,10 +396,6 @@
                 \item Russian Doll Search (FATA, 4pm on 2nd Dec, SAWB423)
                 \item Dichotomic Search
                 \item \ldots
-            \end{itemize}
-        \item Even more flexibility:
-            \begin{itemize}
-                \item Search Combinators (Constraints 2013 18:269-305)
             \end{itemize}
     \end{itemize}
 \end{frame}
