@@ -98,20 +98,20 @@
 
 {
     \usebackgroundtemplate{\includegraphics*[keepaspectratio=true, height=\paperheight]{background.jpg}}
-    \begin{frame}[plain]
+    \begin{frame}[plain,noframenumbering]
         \titlepage
     \end{frame}
 }
 
 \begin{frame}{This Week's Lectures}
     \begin{columns}
-        \column{.5\textwidth}
+        \column{.6\textwidth}
         \begin{itemize}
-            \item Search and Discrepancies
-            \item Parallel CP
+            \item \textcolor{uofgblue}{Search and Discrepancies}
+            \item Parallel Constraint Programming
             \item Parallel Search
         \end{itemize}
-        \column{.5\textwidth}
+        \column{.4\textwidth}
         \centering\includegraphics*[keepaspectratio=true,scale=0.5]{images/search-but-not-as-we-know-it.jpg}
         \begin{center}``It's search, Jim, but not\\as we know it.''\end{center}
     \end{columns}
@@ -204,23 +204,37 @@
 
 \begin{frame}{Two Claims Regarding Heuristics and Search}
 
-    \begin{enumerate}
-        \item The total number of discrepancies to find a solution is usually low (our heuristics
-            are \emph{usually} right).
-        \item Discrepancies are most likely to high up in the tree (there is least
-            information available when no or few choices have been made).
-    \end{enumerate}
+    \only<1>{
+        \begin{enumerate}
+            \item The total number of discrepancies to find a solution is usually low (our heuristics
+                are \emph{usually} right).
+            \item Heuristics are most likely to wrong higher up in the tree (there is least
+                information available when no or few choices have been made).
+        \end{enumerate}
 
-    \vspace{1em}
+        \vspace{1em}
 
-    \begin{columns}[T]
-        \column{.33\textwidth}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.18]{images/lds-paper.png}
-        \column{.33\textwidth}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.18]{images/lds-claim1.png}
-        \column{.33\textwidth}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.18]{images/lds-claim2.png}
-    \end{columns}
+        \begin{columns}[T]
+            \column{.33\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.18]{images/lds-paper.png}
+            \column{.33\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.18]{images/lds-claim1.png}
+            \column{.33\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.18]{images/lds-claim2.png}
+        \end{columns}
+    }
+
+    \only<2>{
+        \begin{center}
+        \includegraphics*[keepaspectratio=true,scale=0.55]{images/lds-claim1.png}
+        \end{center}
+    }
+
+    \only<3>{
+        \begin{center}
+        \includegraphics*[keepaspectratio=true,scale=0.55]{images/lds-claim2.png}
+        \end{center}
+    }
 
 \end{frame}
 
@@ -272,17 +286,26 @@
 \end{frame}
 
 \begin{frame}{Improved Limited Discrepancy Search}
-    \begin{itemize}
-        \item LDS explores some parts of the search tree more than once.
-        \item Improved Limited Discrepancy Search (ILDS) does less repeated work.
-    \end{itemize}
 
-    \begin{columns}[T]
-        \column{.5\textwidth}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.4]{images/ilds-paper.png}
-        \column{.5\textwidth}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.4]{images/ilds-claim.png}
-    \end{columns}
+    \only<1>{
+        \begin{itemize}
+            \item LDS explores some parts of the search tree more than once.
+            \item Improved Limited Discrepancy Search (ILDS) does less repeated work.
+        \end{itemize}
+
+        \begin{columns}[T]
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.4]{images/ilds-paper.png}
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.4]{images/ilds-claim.png}
+        \end{columns}
+    }
+
+    \only<2>{
+        \begin{center}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.6]{images/ilds-claim.png}
+        \end{center}
+    }
 \end{frame}
 
 \begin{frame}{Improved?}
@@ -306,9 +329,6 @@
 
 \end{frame}
 
-\begin{frame}{What About Non-Binary Domains?}
-\end{frame}
-
 \begin{frame}{What About Unsatisfiable Instances?}
 
     \begin{itemize}
@@ -328,6 +348,9 @@
 
 \end{frame}
 
+\begin{frame}{What About Non-Binary Domains?}
+\end{frame}
+
 \begin{frame}{Using LDS?}
     \begin{center}
         \includegraphics*[keepaspectratio=true,scale=0.2]{images/lds-patent.png}
@@ -335,37 +358,56 @@
 \end{frame}
 
 \begin{frame}{Writing Our Own Search in Choco}
-    \begin{itemize}
-        \item Possible in Choco 2 by extending the \texttt{Problem} class: \\
-            \url{http://www.dcs.gla.ac.uk/\~pat/jchoco/lds/golomb}
-        \item Easier in Choco 3 due to more abstraction: it's an example in the manual. (But is this
-            LDS, ILDS, or something else?)
-    \end{itemize}
+    \only<1>{
+        \begin{itemize}
+            \item Possible in Choco 2 by extending the \texttt{Problem} class: \\
+                \url{http://www.dcs.gla.ac.uk/\~pat/jchoco/lds/golomb}
+            \item Easier in Choco 3 due to more abstraction: it's an example in the manual. (But is this
+                LDS, ILDS, or something else?)
+        \end{itemize}
 
-    \begin{columns}[T]
-        \column{.5\textwidth}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.3]{images/lds-choco3-col1.png}
-        \column{.5\textwidth}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.3]{images/lds-choco3-col2.png}
-    \end{columns}
+        \begin{columns}[T]
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.3]{images/lds-choco3-col1.png}
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.3]{images/lds-choco3-col2.png}
+        \end{columns}
+    }
+
+    \only<2>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.5]{images/lds-choco3-col1.png}
+        \end{center}
+    }
 \end{frame}
 
 \begin{frame}{Search Combinators?}
-    \begin{columns}[T]
-        \column{.5\textwidth}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.12]{images/sc-title.png}
-        \vspace{1em}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.27]{images/sc-primitives.png}
+    \only<1>{
+        \begin{columns}[T]
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.12]{images/sc-title.png}
+            \vspace{1em}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.27]{images/sc-primitives.png}
 
-        \column{.5\textwidth}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.25]{images/sc-contributions.png}
-        \vspace{1em}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.25]{images/sc-se.png}
-        \vspace{1em}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.25]{images/sc-lds.png}
-        \vspace{1em}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.25]{images/sc-monads.png}
-    \end{columns}
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.25]{images/sc-contributions.png}
+            \vspace{1em}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.25]{images/sc-se.png}
+            \vspace{1em}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.25]{images/sc-lds.png}
+            \vspace{1em}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.25]{images/sc-monads.png}
+        \end{columns}
+    }
+
+    \only<2->{
+        \begin{center}
+            \includegraphics*<2>[keepaspectratio=true,scale=0.5]{images/sc-contributions.png}
+            \includegraphics*<3>[keepaspectratio=true,scale=0.5]{images/sc-se.png}
+            \includegraphics*<4>[keepaspectratio=true,scale=0.5]{images/sc-lds.png}
+            \includegraphics*<5>[keepaspectratio=true,scale=0.5]{images/sc-monads.png}
+        \end{center}
+    }
 \end{frame}
 
 \begin{frame}{Probably Not Included in This Course}

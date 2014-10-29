@@ -29,7 +29,7 @@
 \definecolor{uofgtorange}{rgb}{0.784314, 0.694118, 0.545098}
 
 % {{{ theme things
-\useoutertheme[footline=authorinstitutetitle]{miniframes}
+\useoutertheme[footline=authortitle]{miniframes}
 \useinnertheme{rectangles}
 
 \setbeamerfont{block title}{size={}}
@@ -42,21 +42,6 @@
 \setbeamercolor*{titlelike}{parent=palette primary}
 
 \beamertemplatenavigationsymbolsempty
-
-\tikzset{vertex/.style={draw, circle, inner sep=0pt, minimum size=0.5cm, font=\small\bfseries}}
-\tikzset{notvertex/.style={vertex, color=white, text=black}}
-\tikzset{plainvertex/.style={vertex}}
-\tikzset{selectedvertex/.style={vertex, fill=uofgblue}}
-\tikzset{vertexc1/.style={vertex, fill=uofgblue40}}
-\tikzset{vertexc2/.style={vertex, fill=uofgblue}}
-\tikzset{vertexc3/.style={vertex, fill=uofgtdarkgreen}}
-\tikzset{vertexc4/.style={vertex, fill=uofgtorange}}
-\tikzset{edge/.style={color=screengrey}}
-\tikzset{bedge/.style={ultra thick}}
-\tikzset{edgel1/.style={ultra thick, color=uofgblue}}
-\tikzset{edgel2/.style={ultra thick, color=uofgblue40}}
-\tikzset{edgel3/.style={ultra thick, color=uofgtdarkgreen}}
-\tikzset{edgel4/.style={ultra thick, color=uofgtorange}}
 
 \setbeamertemplate{title page}
 {
@@ -79,36 +64,103 @@
     \end{tikzpicture}
 }
 
+\newcommand{\frameofframes}{/}
+\newcommand{\setframeofframes}[1]{\renewcommand{\frameofframes}{#1}}
+
+\makeatletter
+\setbeamertemplate{footline}
+{%
+    \begin{beamercolorbox}[colsep=1.5pt]{upper separation line foot}
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+        leftskip=.3cm,rightskip=.3cm plus1fil]{author in head/foot}%
+        \leavevmode{\usebeamerfont{author in head/foot}\insertshortauthor}%
+        \hfill%
+        {\usebeamerfont{institute in head/foot}\usebeamercolor[fg]{institute in head/foot}\insertshortinstitute}%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+        leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
+        {\usebeamerfont{title in head/foot}\insertshorttitle}%
+        \hfill%
+        {\usebeamerfont{frame number}\usebeamercolor[fg]{frame number}\insertframenumber~\frameofframes~\inserttotalframenumber}
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[colsep=1.5pt]{lower separation line foot}
+    \end{beamercolorbox}
+}
+\makeatother
+
 % }}}
 
-\title{Parallel CP}
+\title{Parallel Constraint Programming}
 \author[Ciaran McCreesh]{\textcolor{uofgblue}{Ciaran McCreesh}}
 
 \begin{document}
 
 {
     \usebackgroundtemplate{\includegraphics*[keepaspectratio=true, height=\paperheight]{background.jpg}}
-    \begin{frame}[plain]
+    \begin{frame}[plain,noframenumbering]
         \titlepage
     \end{frame}
 }
 
+\begin{frame}{This Week's Lectures}
+    \begin{columns}
+        \column{.6\textwidth}
+        \begin{itemize}
+            \item Search and Discrepancies
+            \item \textcolor{uofgblue}{Parallel Constraint Programming}
+            \item Parallel Search
+        \end{itemize}
+        \column{.4\textwidth}
+    \end{columns}
+\end{frame}
+
 \begin{frame}{Who Cares?}
 \end{frame}
 
-\begin{frame}{Parallel Optimisation via Decision Problems}
+\begin{frame}{Goals}
+    \begin{enumerate}
+        \item Make slow things run faster.
+            \begin{itemize}
+                \item If ``today's list of parcels to be delivered'' isn't available until 5am, and
+                    producing ``today's delivery schedule'' takes twelve hours, we're in trouble. If
+                    it takes one hour, we're OK.
+
+                \item If it takes one second, we don't care if we can reduce it to one tenth of a
+                    second. (Or maybe we do. What if we're producing results interactively?)
+            \end{itemize}
+
+        \item Deal with bigger or harder problems in ``the amount of time we have''.
+            \begin{itemize}
+                \item We have a fixed amount of time (say, a week) to produce exam timetables. If
+                    the University offers more courses, or more flexibility in course choices, we
+                    need to solve a larger and harder problem in the same amount of time.
+            \end{itemize}
+    \end{enumerate}
 \end{frame}
 
-\begin{frame}{Parallel Portfolios}
+\begin{frame}{Unfortunately\ldots}
+    \begin{itemize}
+        \item Parallel constraint programming is hard.
+        \item Most of this lecture is about techniques that don't usually work very well in
+            practice. The goal is to understand \emph{why} these techniques fail.
+        \item Tomorrow we'll see some techniques that usually work fairly well, most of the time.
+    \end{itemize}
 \end{frame}
 
-\begin{frame}{Parallel Consistency}
+\begin{frame}{Parallel Optimisation via Decision Problems?}
 \end{frame}
 
-\begin{frame}{Bit Parallelism}
+\begin{frame}{Parallel Portfolios?}
 \end{frame}
 
-\begin{frame}{Parallel Tree Search, Attempt 1}
+\begin{frame}{Parallel Consistency?}
+\end{frame}
+
+\begin{frame}{Bit Parallelism?}
+\end{frame}
+
+\begin{frame}{Fixed Parallel Tree Search?}
 \end{frame}
 
 \begin{frame}[b]
@@ -125,4 +177,5 @@
 \end{frame}
 
 \end{document}
+
 
