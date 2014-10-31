@@ -115,7 +115,13 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Who Cares?}
+\begin{frame}{Parallelism and Concurrency}
+    \begin{itemize}
+        \item Concurrent: lots of stuff happening at once (GUIs, operating systems, networking).
+
+        \item Parallel: our hardware can do more than one thing at once (multi-core, multi-machine,
+            vector processing, GPUs).
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Goals}
@@ -139,6 +145,9 @@
     \end{enumerate}
 \end{frame}
 
+\begin{frame}{Why Care?}
+\end{frame}
+
 \begin{frame}{Unfortunately\ldots}
     \begin{itemize}
         \item Parallel constraint programming is hard.
@@ -149,12 +158,75 @@
 \end{frame}
 
 \begin{frame}{Parallel Optimisation via Decision Problems?}
+    \only<1>{
+        \begin{itemize}
+            \item An optimisation problem can be solved as a sequence of decision problems.
+            \item What happens if we solve each decision problem in parallel?
+        \end{itemize}
+    }
+
+    \only<2>{
+        \begin{center}
+        \begin{tikzpicture}
+
+            \newcount \c
+            \foreach \n in {0, ..., 9}{
+                \c=\n
+                \multiply\c by -36
+                \advance\c by 90
+                \advance\c by 18
+                \node[draw, circle, inner sep=5pt, font=\large] (N\n) at (\the\c:3) {~};
+            }
+
+            \draw (N0) -- (N1);
+            \draw (N1) -- (N2);
+            \draw (N1) -- (N3);
+            \draw (N2) -- (N3);
+            \draw (N2) -- (N4);
+            \draw (N3) -- (N4);
+            \draw (N4) -- (N5);
+            \draw (N4) -- (N6);
+            \draw (N5) -- (N6);
+            \draw (N5) -- (N7);
+            \draw (N6) -- (N7);
+            \draw (N7) -- (N8);
+            \draw (N7) -- (N9);
+            \draw (N8) -- (N0);
+            \draw (N8) -- (N9);
+            \draw (N9) -- (N0);
+
+        \end{tikzpicture}
+        \end{center}
+    }
+
+    \only<3>{
+        \begin{itemize}
+            \item Often, only a few of the decision problems are difficult, so we get very poor
+                balance.
+        \end{itemize}
+    }
 \end{frame}
 
 \begin{frame}{Parallel Portfolios?}
+    \begin{itemize}
+        \item We may have many choices available:
+            \begin{itemize}
+                \item Models
+                \item Heuristics
+                \item Search algorithms
+                \item Levels of consistency
+                \item Solvers
+            \end{itemize}
+
+        \item What if we try lots of different combinations in parallel, and pick whichever finishes
+            first?
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Parallel Consistency?}
+\end{frame}
+
+\begin{frame}{Stronger Consistency?}
 \end{frame}
 
 \begin{frame}{Bit Parallelism?}
