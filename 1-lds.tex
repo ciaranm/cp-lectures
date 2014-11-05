@@ -108,6 +108,11 @@
         \column{.6\textwidth}
         \begin{itemize}
             \item \textcolor{uofgblue}{Search and Discrepancies}
+                \begin{itemize}
+                    \item Recap of search and heuristics
+                    \item Ideas and techniques
+                    \item Implementation
+                \end{itemize}
             \item Parallel Constraint Programming
             \item Parallel Search
         \end{itemize}
@@ -184,32 +189,36 @@
 
     \begin{itemize}
         \item Circles are recursive calls, triangles are `big' subproblems.
+        \item Heuristics determine the `shape' of the tree:
+            \begin{itemize}
+                \item Variable-ordering heuristics determine the number of children at each level.
+                \item Value-ordering heuristics determine the paths explored.
+            \end{itemize}
         \item MAC is like Depth-First Search (DFS).
-        \item Heuristics determine the `shape' of the tree.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Heuristics and Discrepancies}
 
     \begin{itemize}
-        \item If our heuristics are perfect, and an instance is satisfiable, we walk straight to a
-            solution by going left at every level.
-        \item If an instance is unsatisfiable, perfect heuristics would give the smallest possible
-            search tree.
+        \item If our value-ordering heuristics are perfect, and an instance is satisfiable, we walk
+            straight to a solution by going left at every level.
+        \item If an instance is unsatisfiable, perfect variable-ordering heuristics would give the
+            smallest possible search tree.
         \item But heuristics aren't perfect\ldots
-        \item We call going against a heuristic choice a ``discrepancy''.
+        \item We call going against a value-ordering heuristic choice a ``discrepancy''.
     \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Two Claims Regarding Heuristics and Search}
+\begin{frame}{Two Claims Regarding Value-Ordering Heuristics}
 
     \only<1>{
         \begin{enumerate}
-            \item The total number of discrepancies to find a solution is usually low (our heuristics
-                are \emph{usually} right).
-            \item Heuristics are most likely to wrong higher up in the tree (there is least
-                information available when no or few choices have been made).
+            \item The total number of discrepancies to find a solution is usually low (our
+                value-ordering heuristics are \emph{usually} right).
+            \item Value-ordering heuristics are most likely to wrong higher up in the tree (there is
+                least information available when no or few choices have been made).
         \end{enumerate}
 
         \vspace{1em}
@@ -285,6 +294,25 @@
     \end{columns}
 \end{frame}
 
+\begin{frame}{What About Non-Binary Trees?}
+    \centering\includegraphics*[keepaspectratio=true,scale=0.4]{images/lds-binary.png}
+
+    \vspace{1em}
+
+    \begin{itemize}
+        \item We can rewrite our search tree to be binary. Instead of branching on each value for a
+            variable in a loop, pick a variable and a value, and branch twice:
+
+            \begin{itemize}
+                \item Yes, the variable takes that value.
+                \item No, the variable does not take that value.
+            \end{itemize}
+
+        \item But this means that giving the 10th value to a variable counts as 9 discrepancies. Is
+            this good or bad?
+    \end{itemize}
+\end{frame}
+
 \begin{frame}{Improved Limited Discrepancy Search}
 
     \only<1>{
@@ -329,26 +357,86 @@
 
 \end{frame}
 
-\begin{frame}{What About Unsatisfiable Instances?}
+\begin{frame}{Depth-Bounded Discrepancy Search}
 
-    \begin{itemize}
-        \item If an instance is unsatisfiable, discrepancy searches (if run to completion) do more
-            work.
-    \end{itemize}
+    \only<1>{
+        \begin{itemize}
+            \item If the second claim \emph{is} important, why not emphasise it more?
 
-    \vspace{1em}
+            \item Depth-bounded discrepancy search considers $k$ discrepancies, but only at depth up
+                to $k - 1$ (but in which order?).
+        \end{itemize}
 
-    \centering\includegraphics*[keepaspectratio=true,scale=0.4]{images/ldsr-bt.png}
+        \vspace{1em}
 
-    \vspace{1em}
+        \begin{columns}[T]
+            \column{.33\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.1]{images/dds-paper.png}
+            \column{.33\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.1]{images/dds-claim.png}
+            \column{.33\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.1]{images/dds-tree.png}
+        \end{columns}
+    }
 
-    \begin{itemize}
-        \item Optimisation?
-    \end{itemize}
+    \only<2>{
+        \begin{center}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.35]{images/dds-claim.png}
+        \end{center}
+    }
+
+    \only<3>{
+        \begin{center}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.35]{images/dds-tree.png}
+        \end{center}
+    }
 
 \end{frame}
 
-\begin{frame}{What About Non-Binary Domains?}
+\begin{frame}{What About Unsatisfiable Instances?}
+
+    \begin{columns}[T]
+        \column{.5\textwidth}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.2]{images/lds-unsat.png}
+        \column{.5\textwidth}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.2]{images/dds-unsat.png}
+    \end{columns}
+
+    \vspace{2em}
+
+    \centering\includegraphics*[keepaspectratio=true,scale=0.4]{images/ldsr-bt.png}
+
+\end{frame}
+
+\begin{frame}{Better Stopping Conditions}
+
+    \centering\includegraphics*[keepaspectratio=true,scale=0.2]{images/stopping-theorem.png}
+
+    \vspace{2em}
+
+    \centering\includegraphics*[keepaspectratio=true,scale=0.2]{images/stopping-result.png}
+
+\end{frame}
+
+\begin{frame}{But wait, there's more!}
+    \begin{itemize}
+        \item Interleaved Depth First Search
+        \item Interleaved and Discrepancy Based Search
+        \item Yet ImprovEd Limited Discrepancy Search
+        \item Beam search Using Limited discrepancy Backtracking
+        \item Probing and restarting
+        \item \ldots
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{What About Optimisation Problems?}
+    \begin{itemize}
+        \item Discrepancy-Bounded Depth First Search
+        \item Branch and Bound (in Algorithmics 4)
+        \item Russian Doll Search (FATA, 4pm on 2nd Dec, SAWB423)
+        \item Dichotomic Search
+        \item \ldots
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Using LDS?}
@@ -357,13 +445,16 @@
     \end{center}
 \end{frame}
 
-\begin{frame}{Writing Our Own Search in Choco}
+\begin{frame}{Writing Our Own Search in Old Choco}
+
+\end{frame}
+
+\begin{frame}{Writing Our Own Search in the Shiny New Choco 3}
     \only<1>{
         \begin{itemize}
-            \item Possible in Choco 2 by extending the \texttt{Problem} class: \\
-                \url{http://www.dcs.gla.ac.uk/\~pat/jchoco/lds/golomb}
-            \item Easier in Choco 3 due to more abstraction: it's an example in the manual. (But is this
-                LDS, ILDS, or something else?)
+            \item Easy in Choco 3 due to more abstraction: it's an example in the manual. (But is
+                this LDS, ILDS, or something else?)
+            \item We still have to write code\ldots
         \end{itemize}
 
         \begin{columns}[T]
@@ -410,24 +501,17 @@
     }
 \end{frame}
 
-\begin{frame}{Probably Not Included in This Course}
+\begin{frame}{What You Should Know}
     \begin{itemize}
-        \item More on this theme:
-            \begin{itemize}
-                \item Depth Bounded Discrepancy Search
-                \item Yet ImprovEd Limited Discrepancy Search
-                \item Beam search Using Limited discrepancy Backtracking
-                \item Probe Search
-                \item Restarts
-                \item \ldots
-            \end{itemize}
-        \item Better searches for optimisation problems:
-            \begin{itemize}
-                \item Branch and Bound (in Algorithmics 4)
-                \item Russian Doll Search (FATA, 4pm on 2nd Dec, SAWB423)
-                \item Dichotomic Search
-                \item \ldots
-            \end{itemize}
+        \item Describing search as a tree.
+
+        \item In general, when and how often are heuristics wrong? (And do you expect this to be
+            true for your particular problem?)
+
+        \item What can we do about it?
+
+        \item What effect does a discrepancy search have for solvable instances? What about
+            unsolvable instances?
     \end{itemize}
 \end{frame}
 
