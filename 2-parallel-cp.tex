@@ -146,6 +146,9 @@
 \end{frame}
 
 \begin{frame}{Why Care?}
+    \begin{itemize}
+        \item Make your programs run 50 times faster overnight!
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Unfortunately\ldots}
@@ -153,7 +156,8 @@
         \item Parallel constraint programming is hard.
         \item Most of this lecture is about techniques that don't usually work very well in
             practice. The goal is to understand \emph{why} these techniques fail.
-        \item Tomorrow we'll see some techniques that usually work fairly well, most of the time.
+        \item Tomorrow we'll see some techniques that usually work fairly well, most of the time, if
+            you don't investigate too closely.
     \end{itemize}
 \end{frame}
 
@@ -175,7 +179,7 @@
                 \multiply\c by -36
                 \advance\c by 90
                 \advance\c by 18
-                \node[draw, circle, inner sep=5pt, font=\large] (N\n) at (\the\c:3) {~};
+                \node[draw, circle, inner sep=6pt, font=\large] (N\n) at (\the\c:2.5) {~};
             }
 
             \draw (N0) -- (N1);
@@ -200,6 +204,51 @@
     }
 
     \only<3>{
+        \begin{center}
+        \begin{tikzpicture}
+
+            \newcount \c
+            \foreach \n in {0, ..., 9}{
+                \c=\n
+                \multiply\c by -36
+                \advance\c by 90
+                \advance\c by 18
+                \ifthenelse{\n = 1 \OR \n = 4 \OR \n = 7} {
+                    \node[draw, circle, inner sep=6pt, font=\large, fill=uofgblue] (N\n) at (\the\c:2.5) {~};
+                }{}
+                \ifthenelse{\n = 2 \OR \n = 5 \OR \n = 8} {
+                    \node[draw, circle, inner sep=6pt, font=\large, fill=uofgtdarkgreen] (N\n) at (\the\c:2.5) {~};
+                }{}
+                \ifthenelse{\n = 3 \OR \n = 6 \OR \n = 9} {
+                    \node[draw, circle, inner sep=6pt, font=\large, fill=uofgtyellow] (N\n) at (\the\c:2.5) {~};
+                }{}
+                \ifthenelse{\n = 0} {
+                    \node[draw, circle, inner sep=6pt, font=\large, fill=uofgstone] (N\n) at (\the\c:2.5) {~};
+                }{}
+            }
+
+            \draw (N0) -- (N1);
+            \draw (N1) -- (N2);
+            \draw (N1) -- (N3);
+            \draw (N2) -- (N3);
+            \draw (N2) -- (N4);
+            \draw (N3) -- (N4);
+            \draw (N4) -- (N5);
+            \draw (N4) -- (N6);
+            \draw (N5) -- (N6);
+            \draw (N5) -- (N7);
+            \draw (N6) -- (N7);
+            \draw (N7) -- (N8);
+            \draw (N7) -- (N9);
+            \draw (N8) -- (N0);
+            \draw (N8) -- (N9);
+            \draw (N9) -- (N0);
+
+        \end{tikzpicture}
+        \end{center}
+    }
+
+    \only<4>{
         \begin{itemize}
             \item Often, only a few of the decision problems are difficult, so we get very poor
                 balance.
