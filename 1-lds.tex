@@ -6,7 +6,7 @@
 \usepackage{xcolor}
 \usepackage{complexity}
 \usepackage{hyperref}
-\usepackage[vlined]{algorithm2e} % algorithms
+\usepackage{listings}
 
 \usetikzlibrary{shapes, arrows, shadows, calc, positioning, fit}
 \usetikzlibrary{decorations.pathreplacing, decorations.pathmorphing, shapes.misc}
@@ -445,8 +445,79 @@
     \end{center}
 \end{frame}
 
-\begin{frame}{Writing Our Own Search in Old Choco}
+\newsavebox{\mycodeboxa}
+\newsavebox{\mycodeboxb}
 
+\begin{lrbox}{\mycodeboxa}
+    \tiny\ttfamily
+\begin{lstlisting}
+public boolean lds(DecisionVar[] v, int kMax,
+        boolean lateDiscrepancies) throws ContradictionException
+{
+    boolean consistent = true;
+    int n = v.length;
+    inst = new int[n];
+    nodes = 0;
+    worldPush();
+    try {
+        super.propagate();
+    }
+    catch (ContradictionException e) {
+        consistent = false;
+    }
+    if (consistent) {
+        consistent = false;
+        for (int k = 0 ; k <= kMax && !consistent ; k++) {
+            worldPush();
+            consistent = ldsProbe(v, n, k, 0, lateDiscrepancies);
+            worldPop();
+        }
+    }
+    worldPop();
+    if (consistent)
+        for (int i = 0 ; i < n ; i++) v[i].setVal(inst[i]);
+    return consistent;
+}
+\end{lstlisting}
+\end{lrbox}
+
+\begin{lrbox}{\mycodeboxb}
+    \tiny\ttfamily
+\begin{lstlisting}
+private boolean ldsProbe(DecisionVar[] v, int n, int k, int i,
+        boolean lateDiscrepancies) throws ContradictionException
+{
+    if (i == n) return true;   // all vars instantiated
+    DecVarEnumeration dve = new DecVarEnumeration(v[i]);
+    boolean result = false;
+    int m  = v[i].getDomainSize();
+    int x  = dve.getNextValue();
+    int pd = getPotentialDiscrepancies(v, n, i + 1);
+    if (lateDiscrepancies && k <= pd && ! result) {
+        worldPush();
+        result = isConsistent(v, i, x) && ldsProbe(v, n, k, i + 1, lateDiscrepancies);
+        worldPop();
+    }
+    for (int j = 1 ; j < m && j <= k && ! result ; j++) {
+        int y = dve.getNextValue();
+        worldPush();
+        if (isConsistent(v, i, y))
+            result = ldsProbe(v, n, k - j, i + 1, lateDiscrepancies);
+        worldPop();
+    }
+    if (! lateDiscrepancies && k <= pd && ! result) {
+        worldPush();
+        result = isConsistent(v, i, x) && ldsProbe(v, n, k, i + 1, lateDiscrepancies);
+        worldPop();
+    }
+    return result;
+}
+\end{lstlisting}
+\end{lrbox}
+
+\begin{frame}{Writing Our Own Search in Old Choco}
+    \only<1>{\usebox{\mycodeboxa}}
+    \only<2>{\usebox{\mycodeboxb}}
 \end{frame}
 
 \begin{frame}{Writing Our Own Search in the Shiny New Choco 3}
@@ -499,20 +570,6 @@
             \includegraphics*<5>[keepaspectratio=true,scale=0.5]{images/sc-monads.png}
         \end{center}
     }
-\end{frame}
-
-\begin{frame}{What You Should Know}
-    \begin{itemize}
-        \item Describing search as a tree.
-
-        \item In general, when and how often are heuristics wrong? (And do you expect this to be
-            true for your particular problem?)
-
-        \item What can we do about it?
-
-        \item What effect does a discrepancy search have for solvable instances? What about
-            unsolvable instances?
-    \end{itemize}
 \end{frame}
 
 \begin{frame}[b]
