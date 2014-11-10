@@ -7,6 +7,7 @@
 \usepackage{complexity}
 \usepackage{hyperref}
 \usepackage[vlined]{algorithm2e} % algorithms
+\usepackage{gnuplot-lua-tikz}
 
 \usetikzlibrary{shapes, arrows, shadows, calc, positioning, fit}
 \usetikzlibrary{decorations.pathreplacing, decorations.pathmorphing, shapes.misc}
@@ -27,6 +28,9 @@
 \definecolor{uofgtlightgreen}{rgb}{0.615686, 0.788235, 0.729412}
 \definecolor{uofgtyellow}{rgb}{0.85098, 0.827451, 0.643137}
 \definecolor{uofgtorange}{rgb}{0.784314, 0.694118, 0.545098}
+
+% make gnuplot graphs use our preferred choice of colours.
+\colorlet{gp lt color 0}{uofgblue}
 
 % {{{ theme things
 \useoutertheme[footline=authortitle]{miniframes}
@@ -254,11 +258,19 @@
     }
 
     \only<4>{
-        Simple CP model of the above for a larger graph goes here.
+        \begin{columns}[T]
+            \column{.7\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.18]{images/colouring-code.png}
+
+            \column{.3\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.18]{images/colouring-graph.png}
+        \end{columns}
     }
 
     \only<5>{
-        Graph showing individual runtimes goes here.
+        \begin{centering}
+            \input{colouring/gen-bigger}
+        \end{centering}
     }
 \end{frame}
 

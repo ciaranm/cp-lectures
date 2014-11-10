@@ -7,9 +7,12 @@ all : tables graphs
 
 TABLES =
 
-GRAPHS =
+GRAPHS = colouring/gen-bigger.tex
 
 tables : $(TABLES)
 
 graphs : $(GRAPHS)
+
+colouring/gen-bigger.tex : colouring/bigger.data colouring/bigger.gnuplot
+	gnuplot colouring/bigger.gnuplot
 
