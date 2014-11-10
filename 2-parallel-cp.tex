@@ -124,6 +124,17 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}{Why Care?}
+    \begin{center}
+        \includegraphics*[keepaspectratio=true,scale=0.2]{images/xeon-phi.jpg}
+    \end{center}
+
+    \begin{itemize}
+        \item Make your programs run 100 times faster overnight! All you need is this simple
+            \textsterling{}2000 card. Doctors (of Philosophy) are astonished!
+    \end{itemize}
+\end{frame}
+
 \begin{frame}{Goals}
     \begin{enumerate}
         \item Make slow things run faster.
@@ -143,12 +154,6 @@
                     need to solve a larger and harder problem in the same amount of time.
             \end{itemize}
     \end{enumerate}
-\end{frame}
-
-\begin{frame}{Why Care?}
-    \begin{itemize}
-        \item Make your programs run 50 times faster overnight!
-    \end{itemize}
 \end{frame}
 
 \begin{frame}{Unfortunately\ldots}
@@ -249,16 +254,123 @@
     }
 
     \only<4>{
+        Simple CP model of the above for a larger graph goes here.
+    }
+
+    \only<5>{
+        Graph showing individual runtimes goes here.
+    }
+\end{frame}
+
+\begin{frame}{Measuring Parallel Improvements}
+    \only<1>{
         \begin{itemize}
-            \item Often, only a few of the decision problems are difficult, so we get very poor
+            \item \emph{Speedup} is sequential runtime divided by parallel runtime.
+                \begin{itemize}
+                    \item Ideally, over a good sequential algorithm, not a parallel algorithm run with one
+                        thread. This is sometimes called \emph{absolute} speedup.
+                    \item This may not be practical if using special hardware.
+                \end{itemize}
+
+            \item A \emph{linear} speedup is a speedup of $n$ using $n$ processors.
+                \begin{itemize}
+                    \item This is not a realistic expectation on modern hardware.
+                \end{itemize}
+        \end{itemize}
+    }
+
+    \only<2>{
+        \begin{itemize}
+            \item \emph{Balance} is whether every compute unit is kept busy doing useful work.
+
+            \item A \emph{regular} problem is one which can easily be split into equally sized units of
+                work. Irregular problems are hard to balance.
+
+            \item Often only a small number of the decision problems are ``really hard'', so we get poor
                 balance.
+        \end{itemize}
+    }
+
+    \only<3>{
+        \begin{itemize}
+            \item Most parallel algorithms contain a ``sequential'' part which cannot be parallelised,
+                and a ``parallel'' part.
+
+            \item \emph{Amdahl's law} says that if the sequential portion is fixed and we divide the
+                parallel portion perfectly among $n$ processors, and if $k$ is the fraction of the
+                work we cannot parallelise, then \[
+                    \mathit{best~speedup} = \frac{1}{k + \frac{1}{n}\left(1 - k\right)}
+                \]
+
+            \item For CP algorithms, things get much more complicated, so it is important to understand
+                where the formula comes from (using primary school maths), rather than memorising it.
+
+            \item \emph{Gustafson's law} deals with using more processors to tackle larger problems.
+        \end{itemize}
+    }
+
+    \only<4>{
+        \begin{itemize}
+            \item So we need a large parallelisable portion of the algorithm, \emph{and} good work
+                balance, or we don't get much of an improvement.
         \end{itemize}
     }
 \end{frame}
 
+\begin{frame}{Parallel Consistency?}
+    \only<1>{
+        \begin{columns}[T]
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.12]{images/disac4-paper.png}
+
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.12]{images/disac4-linear.png}
+            \vspace{0.5em}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.12]{images/disac4-massive.png}
+        \end{columns}
+
+        \vspace{3em}
+
+        \begin{columns}[T]
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.12]{images/parallel-consistency-paper.png}
+
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.12]{images/parallel-consistency-method.png}
+            \vspace{1em}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.12]{images/parallel-consistency-results.png}
+
+        \end{columns}
+    }
+
+    \only<2>{
+            \centering\includegraphics*[keepaspectratio=true,scale=0.25]{images/parallel-consistency-method.png}
+    }
+
+    \only<3>{
+        \begin{center}\includegraphics*[keepaspectratio=true,scale=0.25]{images/disac4-linear.png}\end{center}
+
+        \vspace{2em}
+
+        \begin{center}\includegraphics*[keepaspectratio=true,scale=0.25]{images/parallel-consistency-results.png}\end{center}
+    }
+
+    \only<4>{
+            \centering\includegraphics*[keepaspectratio=true,scale=0.25]{images/disac4-massive.png}
+    }
+\end{frame}
+
+\begin{frame}{Bit Parallelism?}
+\end{frame}
+
+\begin{frame}{Fixed Parallel Tree Search?}
+\end{frame}
+
 \begin{frame}{Parallel Portfolios?}
     \begin{itemize}
-        \item We may have many choices available:
+        \item Irregularity seems to be a problem\ldots How about a different approach? We may have
+            many choices available:
+
             \begin{itemize}
                 \item Models
                 \item Heuristics
@@ -267,21 +379,10 @@
                 \item Solvers
             \end{itemize}
 
-        \item What if we try lots of different combinations in parallel, and pick whichever finishes
-            first?
+        \item What if we try lots of different combinations in parallel?
+
+        \item Now our runtimes are determined by whoever finishes first, not whoever finishes last.
     \end{itemize}
-\end{frame}
-
-\begin{frame}{Parallel Consistency?}
-\end{frame}
-
-\begin{frame}{Stronger Consistency?}
-\end{frame}
-
-\begin{frame}{Bit Parallelism?}
-\end{frame}
-
-\begin{frame}{Fixed Parallel Tree Search?}
 \end{frame}
 
 \begin{frame}[b]
