@@ -357,6 +357,12 @@
 
 \end{frame}
 
+\begin{frame}{Is LDS Any Good?}
+    \begin{center}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.3]{images/lds-car-sequencing.png}
+    \end{center}
+\end{frame}
+
 \begin{frame}{Depth-Bounded Discrepancy Search}
 
     \only<1>{
@@ -393,18 +399,49 @@
 
 \end{frame}
 
+\begin{frame}{Is DDS Any Good?}
+    \only<1>{
+        \begin{center}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.3]{images/planning-title.png}
+        \end{center}
+        \begin{columns}[T]
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.3]{images/planning-abstract.png}
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.3]{images/planning-results.png}
+        \end{columns}
+    }
+
+    \only<2>{
+        \centering\includegraphics*[keepaspectratio=true,scale=0.6]{images/planning-abstract.png}
+        \vspace{0em}
+    }
+
+    \only<3>{
+        \centering\includegraphics*[keepaspectratio=true,scale=0.6]{images/lumberjack.jpg}
+        \vspace{0em}
+    }
+
+    \only<4>{
+        \centering\includegraphics*[keepaspectratio=true,scale=0.6]{images/planning-results.png}
+        \vspace{0em}
+    }
+\end{frame}
+
 \begin{frame}{What About Unsatisfiable Instances?}
 
-    \begin{columns}[T]
-        \column{.5\textwidth}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.2]{images/lds-unsat.png}
-        \column{.5\textwidth}
-        \centering\includegraphics*[keepaspectratio=true,scale=0.2]{images/dds-unsat.png}
-    \end{columns}
+    \only<2>{
+        \begin{columns}[T]
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.2]{images/lds-unsat.png}
+            \column{.5\textwidth}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.2]{images/dds-unsat.png}
+        \end{columns}
 
-    \vspace{2em}
+        \vspace{2em}
 
-    \centering\includegraphics*[keepaspectratio=true,scale=0.4]{images/ldsr-bt.png}
+        \centering\includegraphics*[keepaspectratio=true,scale=0.4]{images/ldsr-bt.png}
+    }
 
 \end{frame}
 
@@ -423,6 +460,7 @@
         \item Interleaved Depth First Search
         \item Interleaved and Discrepancy Based Search
         \item Yet ImprovEd Limited Discrepancy Search
+        \item Limited Discrepancy Beam Search
         \item Beam search Using Limited discrepancy Backtracking
         \item Probing and restarting
         \item \ldots
@@ -432,6 +470,7 @@
 \begin{frame}{What About Optimisation Problems?}
     \begin{itemize}
         \item Discrepancy-Bounded Depth First Search
+        \item Climbing Depth-Bounded Adjacent Discrepancy Search
         \item Branch and Bound (in Algorithmics 4)
         \item Russian Doll Search (FATA, 4pm on 2nd Dec, SAWB423)
         \item Dichotomic Search
