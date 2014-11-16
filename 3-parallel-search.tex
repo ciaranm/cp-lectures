@@ -7,6 +7,7 @@
 \usepackage{complexity}
 \usepackage{hyperref}
 \usepackage[vlined]{algorithm2e} % algorithms
+\usepackage{gnuplot-lua-tikz}
 
 \usetikzlibrary{shapes, arrows, shadows, calc, positioning, fit}
 \usetikzlibrary{decorations.pathreplacing, decorations.pathmorphing, shapes.misc}
@@ -28,8 +29,11 @@
 \definecolor{uofgtyellow}{rgb}{0.85098, 0.827451, 0.643137}
 \definecolor{uofgtorange}{rgb}{0.784314, 0.694118, 0.545098}
 
+% make gnuplot graphs use our preferred choice of colours.
+\colorlet{gp lt color 0}{uofgblue}
+
 % {{{ theme things
-\useoutertheme[footline=authorinstitutetitle]{miniframes}
+\useoutertheme[footline=authortitle]{miniframes}
 \useinnertheme{rectangles}
 
 \setbeamerfont{block title}{size={}}
@@ -42,21 +46,6 @@
 \setbeamercolor*{titlelike}{parent=palette primary}
 
 \beamertemplatenavigationsymbolsempty
-
-\tikzset{vertex/.style={draw, circle, inner sep=0pt, minimum size=0.5cm, font=\small\bfseries}}
-\tikzset{notvertex/.style={vertex, color=white, text=black}}
-\tikzset{plainvertex/.style={vertex}}
-\tikzset{selectedvertex/.style={vertex, fill=uofgblue}}
-\tikzset{vertexc1/.style={vertex, fill=uofgblue40}}
-\tikzset{vertexc2/.style={vertex, fill=uofgblue}}
-\tikzset{vertexc3/.style={vertex, fill=uofgtdarkgreen}}
-\tikzset{vertexc4/.style={vertex, fill=uofgtorange}}
-\tikzset{edge/.style={color=screengrey}}
-\tikzset{bedge/.style={ultra thick}}
-\tikzset{edgel1/.style={ultra thick, color=uofgblue}}
-\tikzset{edgel2/.style={ultra thick, color=uofgblue40}}
-\tikzset{edgel3/.style={ultra thick, color=uofgtdarkgreen}}
-\tikzset{edgel4/.style={ultra thick, color=uofgtorange}}
 
 \setbeamertemplate{title page}
 {
@@ -79,6 +68,31 @@
     \end{tikzpicture}
 }
 
+\newcommand{\frameofframes}{/}
+\newcommand{\setframeofframes}[1]{\renewcommand{\frameofframes}{#1}}
+
+\makeatletter
+\setbeamertemplate{footline}
+{%
+    \begin{beamercolorbox}[colsep=1.5pt]{upper separation line foot}
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+        leftskip=.3cm,rightskip=.3cm plus1fil]{author in head/foot}%
+        \leavevmode{\usebeamerfont{author in head/foot}\insertshortauthor}%
+        \hfill%
+        {\usebeamerfont{institute in head/foot}\usebeamercolor[fg]{institute in head/foot}\insertshortinstitute}%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+        leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
+        {\usebeamerfont{title in head/foot}\insertshorttitle}%
+        \hfill%
+        {\usebeamerfont{frame number}\usebeamercolor[fg]{frame number}\insertframenumber~\frameofframes~\inserttotalframenumber}
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[colsep=1.5pt]{lower separation line foot}
+    \end{beamercolorbox}
+}
+\makeatother
+
 % }}}
 
 \title{Parallel Search}
@@ -87,25 +101,123 @@
 \begin{document}
 
 {
-    \usebackgroundtemplate{\includegraphics*[keepaspectratio=true, height=\paperheight]{background.jpg}}
-    \begin{frame}[plain]
+    \usebackgroundtemplate{\includegraphics*[keepaspectratio=true, height=\paperheight]{background2.jpg}}
+    \begin{frame}[plain,noframenumbering]
         \titlepage
     \end{frame}
 }
 
-\begin{frame}{Problems with Fixed Equal Splitting}
+\begin{frame}{This Week's Lectures}
+    \begin{itemize}
+        \item Search and Discrepancies
+        \item Parallel Constraint Programming
+        \item \textcolor{uofgblue}{Parallel Search}
+            \begin{itemize}
+                \item Embarrassingly Parallel Search
+                \item Work stealing
+                \item Confidence Based Work Stealing
+            \end{itemize}
+    \end{itemize}
 \end{frame}
 
-\begin{frame}{Randomised Work Stealing}
+\begin{frame}{Fixed Parallel Tree Search, Again}
+
+    \begin{center}
+        \begin{tikzpicture}[scale=0.75]%{{{
+        \coordinate (R);
+
+        \coordinate (N) at (R);
+
+        \coordinate (N1) at ($(N) + (-4, -1.25)$);
+        \coordinate (N2) at ($(N) + ( 0, -1.25)$);
+        \coordinate (N3) at ($(N) + ( 4, -1.25)$);
+
+        \foreach \na in {1, ..., 3}{
+            \coordinate (N\na 1) at ($(N\na) + (-1.25, -1)$);
+            \coordinate (N\na 2) at ($(N\na) + ( 0,    -1)$);
+            \coordinate (N\na 3) at ($(N\na) + ( 1.25, -1)$);
+
+            \foreach \nb in {1, ..., 3}{
+                \coordinate (N\na\nb t1) at ($(N\na\nb) + (-0.5, -1)$);
+                \coordinate (N\na\nb t2) at ($(N\na\nb) + ( 0.5, -1)$);
+
+                \coordinate (N\na\nb s1) at ($(N\na\nb) + (-0.3, -0.6)$);
+                \coordinate (N\na\nb s2) at ($(N\na\nb) + ( 0.3, -0.6)$);
+
+                \coordinate (N\na\nb h1) at ($(N\na\nb) + (-1.5, -3)$);
+                \coordinate (N\na\nb h2) at ($(N\na\nb) + ( 1.5, -3)$);
+            }
+        }
+
+        \tikzstyle{p} = [draw, rounded corners, dashed, color=uofgtorange, ultra thick];
+        \draw <2-3> [p] ($(N11) + (-0.55, 0.51)$) -- ($(N12) + (0.55, 0.51)$) -- ($(N12) + (0.55, -1.5)$) -- ($(N11) + (-0.55, -1.5)$) -- cycle;
+        \draw <2-3> [p] ($(N13) + (-0.55, 0.51)$) -- ($(N21) + (0.55, 0.51)$) -- ($(N21) + (0.55, -1.5)$) -- ($(N13) + (-0.55, -1.5)$) -- cycle;
+        \draw <2-3> [p] ($(N22) + (-0.55, 0.51)$) -- ($(N23) + (0.55, 0.51)$) -- ($(N23) + (0.55, -1.5)$) -- ($(N22) + (-0.55, -1.5)$) -- cycle;
+        \draw <2-3> [p] ($(N31) + (-0.55, 0.51)$) -- ($(N33) + (0.55, 0.51)$) -- ($(N33) + (0.55, -1.5)$) -- ($(N31) + (-0.55, -1.5)$) -- cycle;
+
+        \foreach \na in {1, ..., 3}{
+            \draw (N) -- (N\na);
+            \foreach \nb in {1, ..., 3}{
+                \draw (N\na) -- (N\na\nb);
+            }
+        }
+
+        \tikzstyle{t} = [draw, fill, fill=uofgblue, rounded corners];
+        \foreach \na in {1, ..., 3}{
+            \foreach \nb in {1, ..., 3}{
+                \draw <1-2> [t] (N\na\nb) -- (N\na\nb t1) -- (N\na\nb t2) -- cycle;
+            }
+        }
+
+        \draw <3> [t] (N11) -- (N11s1) -- (N11s2) -- cycle;
+        \draw <3> [t] (N12) -- (N12s1) -- (N12s2) -- cycle;
+        \draw <3> [t] (N13) -- (N13s1) -- (N13s2) -- cycle;
+
+        \draw <3> [t] (N21) -- (N21t1) -- (N21t2) -- cycle;
+        \draw <3> [t] (N22) -- (N22h1) -- (N22h2) -- cycle;
+        \draw <3> [t] (N23) -- (N23s1) -- (N23s2) -- cycle;
+
+        \draw <3> [t] (N31) -- (N31s1) -- (N31s2) -- cycle;
+        \draw <3> [t] (N32) -- (N32t1) -- (N32t2) -- cycle;
+        \draw <3> [t] (N33) -- (N33s1) -- (N33s2) -- cycle;
+
+        \tikzstyle{c} = [draw, circle, fill, fill=uofgblue];
+        \node [c] at (N) { };
+
+        \foreach \na in {1, ..., 3}{
+            \node [c] at (N\na) { };
+
+            \foreach \nb in {1, ..., 3}{
+                \node [c] at (N\na\nb) { };
+            }
+        }
+
+        \node at (-7, -5.5) { }; \node at (7, -5.5) { };
+    \end{tikzpicture}%}}}
+    \end{center}
 \end{frame}
 
 \begin{frame}{Embarrassingly Parallel Search}
+    \begin{itemize}
+        \item If we create $n$ subproblems, chances are we'll get poor balance.
+        \item We can't tell beforehand where the really hard subproblems will be.
+        \item What if we create \emph{lots} of subproblems?
+    \end{itemize}
 \end{frame}
 
-\begin{frame}{Speedups from Tree Searches}
+\begin{frame}{Work Stealing}
+    \begin{itemize}
+        \item What if we split work entirely dynamically?
+        \item Whenever a worker is idle, have it steal a subproblem from another worker.
+    \end{itemize}
 \end{frame}
 
-\begin{frame}{Parallel Discrepancy Searches}
+\begin{frame}{Speedups}
+
+\end{frame}
+
+\begin{frame}{Confidence Based Work Stealing}
+
 \end{frame}
 
 \begin{frame}[b]
@@ -122,4 +234,5 @@
 \end{frame}
 
 \end{document}
+
 

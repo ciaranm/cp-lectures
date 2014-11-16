@@ -108,15 +108,17 @@
 }
 
 \begin{frame}{This Week's Lectures}
-    \begin{columns}
-        \column{.6\textwidth}
-        \begin{itemize}
-            \item Search and Discrepancies
-            \item \textcolor{uofgblue}{Parallel Constraint Programming}
-            \item Parallel Search
-        \end{itemize}
-        \column{.4\textwidth}
-    \end{columns}
+    \begin{itemize}
+        \item Search and Discrepancies
+        \item \textcolor{uofgblue}{Parallel Constraint Programming}
+            \begin{itemize}
+                \item Why?
+                \item Some failed attempts
+                \item A little bit of theory and some very simple maths
+                \item Some partial successes
+            \end{itemize}
+        \item Parallel Search
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Parallelism and Concurrency}
@@ -341,7 +343,7 @@
 
     \only<4>{
         \begin{itemize}
-            \item So we need a large parallelisable portion of the algorithm, \emph{and} good work
+            \item We need a large parallelisable portion of the algorithm, \emph{and} good work
                 balance, or we don't get much of an improvement.
         \end{itemize}
     }
@@ -422,6 +424,25 @@
         \node at (-7, -5.5) { }; \node at (7, -5.5) { };
     \end{tikzpicture}%}}}
     \end{center}
+\end{frame}
+
+\begin{frame}{Parallel Portfolios?}
+    \begin{itemize}
+        \item Irregularity seems to be a problem\ldots How about a different approach? We may have
+            many choices available:
+
+            \begin{itemize}
+                \item Models
+                \item Heuristics
+                \item Search algorithms
+                \item Levels of consistency
+                \item Solvers
+            \end{itemize}
+
+        \item What if we try lots of different combinations in parallel?
+
+        \item Now our runtimes are determined by whoever finishes first, not whoever finishes last.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Parallel Consistency?}
@@ -530,31 +551,82 @@
 
     \only<6>{
         \centering\includegraphics*[keepaspectratio=true,scale=0.5]{images/inquisition.jpg}
-
         \vspace{0em}
     }
 \end{frame}
 
-\begin{frame}{Bit Parallelism?}
+\begin{frame}{Representing Domains}
+    \begin{itemize}
+        \item A variable's domain contains a set of values.
+        \item How should we implement this this?
+            \begin{itemize}
+                \item \visible<2>{A list.}
+                \item \visible<2>{An array.}
+                \item \visible<2>{A tree.}
+                \item \visible<2>{A purely functional tree.}
+                \item \visible<2>{A hash set.}
+                \item \visible<2>{Just a pair of values, if we're doing bounds consistency.}
+                \item \visible<2>{\ldots}
+            \end{itemize}
+    \end{itemize}
 \end{frame}
 
-\begin{frame}{Parallel Portfolios?}
-    \begin{itemize}
-        \item Irregularity seems to be a problem\ldots How about a different approach? We may have
-            many choices available:
+\begin{frame}{Bitsets and Bit Parallelism}
+    \only<1>{
+        \begin{itemize}
+            \item Domains are sometimes small and compact.
 
-            \begin{itemize}
-                \item Models
-                \item Heuristics
-                \item Search algorithms
-                \item Levels of consistency
-                \item Solvers
-            \end{itemize}
+            \item If domains have no more than 64 values, we can store them in (long unsigned) integers.
+                We have one bit per value. $0$ means ``not in the set'' and $1$ means ``in the set''.
 
-        \item What if we try lots of different combinations in parallel?
+            \item We can use arrays of integers for larger domains. (And we can go up to 512 bit
+                integers on some Intel CPUs.)
+        \end{itemize}
+    }
 
-        \item Now our runtimes are determined by whoever finishes first, not whoever finishes last.
-    \end{itemize}
+    \only<2>{
+        \begin{itemize}
+            \item This is hardware-friendly: the entire model might fit in cache. Pushing and
+                popping world takes a few nanoseconds.
+
+            \item Setting a domain to take exactly one value: \[
+                    d \gets 1 \ll v
+                \]
+
+            \item Testing whether or not a value is present in a domain: \[
+                    d~\&~(1 \ll v) \ne 0
+                \]
+
+            \item Turning a single bit off: \[
+                    d \gets d~\&~\text{\textasciitilde}(1 \ll v)
+                \]
+
+            \item There are dedicated hardware instructions for all of these in recent CPUs. We can
+                also count the number of set bits (how many values are left in our domain?), and
+                find the first set bit (pick a value from the domain) in hardware.
+        \end{itemize}
+    }
+
+    \only<3>{
+        \begin{itemize}
+            \item Some constraints are similarly bitset friendly.
+
+            \item Extensional constraints (a list of all ``allowed pairs'') can be represented as
+                a ``compatibility'' bitset for each value in each variable's domain. Now
+                forward checking is just a bitwise ``and'' operation.
+                \begin{itemize}
+                    \item Uses a lot of memory, but if our model is reasonably small and dense
+                        that's fine.
+                \end{itemize}
+
+            \item Less than, greater than, and certain arithmetic constraints.
+                \begin{itemize}
+                    \item Fun exercise: figure this out.
+                \end{itemize}
+
+            \item Some constraints are probably not bitset friendly.
+        \end{itemize}
+    }
 \end{frame}
 
 \begin{frame}[b]
