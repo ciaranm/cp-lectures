@@ -265,51 +265,51 @@
 \end{frame}
 
 \begin{frame}{Work Stealing}
-    \only<1>{
-        \begin{itemize}
-            \item What if we split work entirely dynamically?
-            \item Whenever a worker is idle, have it steal a subproblem from another worker.
-        \end{itemize}
-    }
+    \begin{itemize}
+        \item What if we split work entirely dynamically?
+        \item Whenever a worker is idle, have it steal a subproblem from another worker.
+    \end{itemize}
+\end{frame}
 
-    \only<2>{
+\begin{frame}{Work Stealing is Available as Standard in Gecode}
+    \only<1>{
         \begin{center}
             \includegraphics*[keepaspectratio=true,scale=0.18]{images/gecode-parallel.png}
         \end{center}
     }
 
-    \only<3>{
+    \only<2>{
         \begin{center}
             \includegraphics*[keepaspectratio=true,scale=0.18]{images/gecode-facts1.png}
         \end{center}
     }
 
-    \only<4>{
+    \only<3>{
         \begin{center}
             \includegraphics*[keepaspectratio=true,scale=0.18]{images/gecode-facts2.png}
         \end{center}
     }
 
-    \only<5>{
+    \only<4>{
         \begin{center}
             \includegraphics*[keepaspectratio=true,scale=0.18]{images/gecode-optimistic.png}
         \end{center}
     }
 
-    \only<6>{
+    \only<5>{
         \begin{center}
             \includegraphics*[keepaspectratio=true,scale=0.18]{images/gecode-result1.png}
         \end{center}
     }
 
-    \only<7>{
+    \only<6>{
         \begin{center}
             \includegraphics*[keepaspectratio=true,scale=0.18]{images/gecode-result2.png}
         \end{center}
     }
 \end{frame}
 
-\begin{frame}{Speedups}
+\begin{frame}{Speedups from Parallel Tree Search}
 
     \only<1>{
         \begin{itemize}
@@ -434,7 +434,12 @@
                 \emph{better} work balance gave \emph{worse} performance, because it took longer to
                 find a solution.
 
-            \item Remember Harvey and Ginsberg?
+            \item Remember Harvey and Ginsberg, from Monday?
+
+                \begin{enumerate}\stepcounter{enumi}
+                    \item Value-ordering heuristics are most likely to wrong higher up in the tree (there is
+                        least information available when no or few choices have been made).
+                \end{enumerate}
 
             \item Stealing early or splitting high introduces diversity against early heuristic
                 choices. Stealing late gives a close-to-sequential ordering.
