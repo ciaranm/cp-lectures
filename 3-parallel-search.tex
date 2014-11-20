@@ -101,7 +101,7 @@
 \begin{document}
 
 {
-    \usebackgroundtemplate{\includegraphics*[keepaspectratio=true, height=\paperheight]{background2.jpg}}
+    \usebackgroundtemplate{\includegraphics*[keepaspectratio=true, height=\paperheight]{background3.jpg}}
     \begin{frame}[plain,noframenumbering]
         \titlepage
     \end{frame}
@@ -198,18 +198,108 @@
 \end{frame}
 
 \begin{frame}{Embarrassingly Parallel Search}
-    \begin{itemize}
-        \item If we create $n$ subproblems, chances are we'll get poor balance.
-        \item We can't tell beforehand where the really hard subproblems will be.
-        \item What if we create \emph{lots} of subproblems?
-    \end{itemize}
+    \only<1>{
+        \begin{itemize}
+            \item If we create $n$ subproblems, chances are we'll get poor balance.
+            \item We can't tell beforehand where the really hard subproblems will be.
+            \item What if we create \emph{lots} of subproblems?
+        \end{itemize}
+    }
+
+    \only<2>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/eps-paper.png}
+            \vspace{1em}
+            \centering\includegraphics*[keepaspectratio=true,scale=0.18]{images/eps-abstract.png}
+        \end{center}
+    }
+
+    \only<3>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/eps-split-k.png}
+        \end{center}
+    }
+
+    \only<4>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/eps-split-30k.png}
+        \end{center}
+    }
+
+    \only<5>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/eps-generation.png}
+        \end{center}
+    }
+
+    \only<6>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/eps-assumption.png}
+        \end{center}
+    }
+
+    \only<7>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/eps-optimisation.png}
+        \end{center}
+    }
+
+    \only<8>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/eps-results.png}
+        \end{center}
+    }
+
+    \only<9>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/eps-why30.png}
+        \end{center}
+    }
 \end{frame}
 
 \begin{frame}{Work Stealing}
-    \begin{itemize}
-        \item What if we split work entirely dynamically?
-        \item Whenever a worker is idle, have it steal a subproblem from another worker.
-    \end{itemize}
+    \only<1>{
+        \begin{itemize}
+            \item What if we split work entirely dynamically?
+            \item Whenever a worker is idle, have it steal a subproblem from another worker.
+        \end{itemize}
+    }
+
+    \only<2>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/gecode-parallel.png}
+        \end{center}
+    }
+
+    \only<3>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/gecode-facts1.png}
+        \end{center}
+    }
+
+    \only<4>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/gecode-facts2.png}
+        \end{center}
+    }
+
+    \only<5>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/gecode-optimistic.png}
+        \end{center}
+    }
+
+    \only<6>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/gecode-result1.png}
+        \end{center}
+    }
+
+    \only<7>{
+        \begin{center}
+            \includegraphics*[keepaspectratio=true,scale=0.18]{images/gecode-result2.png}
+        \end{center}
+    }
 \end{frame}
 
 \begin{frame}{Speedups}
