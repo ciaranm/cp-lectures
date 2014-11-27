@@ -1,0 +1,59 @@
+% vim: set spell spelllang=en tw=100 et sw=4 sts=4 :
+
+\documentclass{article}
+
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{etex}
+\usepackage{fullpage}
+\usetikzlibrary{calc}
+
+\usepackage{lmodern}
+\renewcommand*\familydefault{\sfdefault}
+\usepackage[T1]{fontenc}
+
+\begin{document}
+
+\pagestyle{empty}
+\newcounter{row}
+\newcounter{col}
+\begin{center}\begin{tikzpicture}[scale=0.5]
+
+\newcommand\setrow[9]{
+    \setcounter{col}{1}
+    \foreach \n in {#1, #2, #3, #4, #5, #6, #7, #8, #9} {
+        \newcount \x
+        \newcount \y
+        \x=\value{col}
+        \advance \x by -1
+        \multiply \x by 3
+        \y=9
+        \advance \y by -\value{row}
+        \multiply \y by 3
+        \node[anchor=center] at ($(\x + 1.5, \y + 1.5)$) {\Large\n};
+        \stepcounter{col}
+    }
+    \stepcounter{row}
+}
+
+\draw[thick, scale=3, color=gray] (0, 0) grid (9, 9);
+\draw[very thick, scale=9, color=black] (0, 0) grid (3, 3);
+
+\setcounter{row}{1}
+
+\setrow { }{ }{ } { }{ }{ } {5}{4}{ }
+\setrow { }{ }{ } { }{ }{3} {8}{ }{ }
+\setrow { }{ }{8} {7}{1}{ } { }{2}{ }
+
+\setrow { }{1}{7} {4}{ }{ } { }{8}{ }
+\setrow {4}{ }{ } { }{ }{ } { }{ }{2}
+\setrow { }{ }{ } { }{ }{ } { }{3}{1}
+:
+\setrow {2}{ }{ } {1}{ }{ } { }{6}{ }
+\setrow {7}{ }{ } { }{ }{8} { }{ }{ }
+\setrow { }{6}{3} { }{ }{7} { }{ }{ }
+
+\end{tikzpicture}\end{center}
+
+\end{document}
+
